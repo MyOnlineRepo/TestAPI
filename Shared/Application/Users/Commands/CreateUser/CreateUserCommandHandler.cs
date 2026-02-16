@@ -22,12 +22,13 @@ public sealed class CreateUserCommandHandler : ICommandHandler<CreateUserCommand
     {
         ArgumentNullException.ThrowIfNull(command);
 
+        var normalizedEmail = NormalizeEmail(command.Email);
         EnsureDisplayNameIsValid(command.DisplayName);
-        await EnsureEmailIsUniqueAsync(command.Email, cancellationToken);
+        await EnsureEmailIsUniqueAsync(normalizedEmail, cancellationToken);
 
         var user = User.Create(
             Guid.NewGuid(),
-            command.Email,
+            normalizedEmail,
             command.DisplayName,
             _dateTimeProvider.UtcNow,
             isActive: true);
@@ -37,6 +38,8 @@ public sealed class CreateUserCommandHandler : ICommandHandler<CreateUserCommand
 
     private static void EnsureDisplayNameIsValid(string displayName)
     {
+        ArgumentNullException.ThrowIfNull(displayName);
+
         if (displayName.Length != 8)
         {
             throw new InvalidOperationException("Display name must be exactly 8 characters long.");
@@ -46,6 +49,16 @@ public sealed class CreateUserCommandHandler : ICommandHandler<CreateUserCommand
         {
             throw new InvalidOperationException("Display name must not contain whitespace.");
         }
+    }
+
+    private static string NormalizeEmail(string email)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            throw new InvalidOperationException("Email must not be empty.");
+        }
+
+        return email.Trim();
     }
 
     private async Task EnsureEmailIsUniqueAsync(string email, CancellationToken cancellationToken)
