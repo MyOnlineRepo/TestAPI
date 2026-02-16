@@ -23,6 +23,7 @@ public sealed class CreateUserCommandHandler : ICommandHandler<CreateUserCommand
         ArgumentNullException.ThrowIfNull(command);
 
         var normalizedEmail = NormalizeEmail(command.Email);
+
         EnsureDisplayNameIsValid(command.DisplayName);
         await EnsureEmailIsUniqueAsync(normalizedEmail, cancellationToken);
 
@@ -36,7 +37,7 @@ public sealed class CreateUserCommandHandler : ICommandHandler<CreateUserCommand
         await _userRepository.CreateAsync(user, cancellationToken);
     }
 
-    private static void EnsureDisplayNameIsValid(string displayName)
+    private static void EnsureDisplayNameIsValid(string? displayName)
     {
         ArgumentNullException.ThrowIfNull(displayName);
 
