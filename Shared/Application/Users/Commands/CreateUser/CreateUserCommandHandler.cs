@@ -39,10 +39,7 @@ public sealed class CreateUserCommandHandler : ICommandHandler<CreateUserCommand
 
     private static void EnsureDisplayNameIsValid(string? displayName)
     {
-        if (displayName is null)
-        {
-            throw new InvalidOperationException("Display name must not be null.");
-        }
+        ArgumentNullException.ThrowIfNull(displayName);
 
         if (displayName.Length != 8)
         {
