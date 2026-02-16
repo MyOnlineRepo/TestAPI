@@ -1,6 +1,6 @@
-namespace TestAPI
+namespace Presentation.ViewModels
 {
-	public class WeatherForecast
+	public class WeatherForecastViewModel
 	{
 		public DateOnly Date { get; set; }
 
