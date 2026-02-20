@@ -8,10 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.2" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="Presentation/Presentation.csproj" />
+    <ProjectReference Include="Shared/Shared.csproj" />
   </ItemGroup>
 
 </Project>
